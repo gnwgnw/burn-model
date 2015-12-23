@@ -26,23 +26,21 @@ function [u_t, g, dg] = calculate_u(lambda,R,Cp,Pk,Ts,Tmax,rho_t,Ak,Ea,Gt,Cpt,Ts
 %     Ea = 4e6;
 
     burn_mesh_dens = 0.9;
-    
+
     x_mesh = unique([
         linspace(0, burn_edge, burn_mesh_dens*N) linspace(burn_edge, right, (1-burn_mesh_dens)*N)
     ]);
 
     [C1,C2,B,C,F] = params(lambda,R,Cp,Pk,Ts,Tmax,Ak,Ea,Gt,Cpt,Ts0);
-    
+
     solinit = bvpinit(x_mesh, [1 1]);
     sol = bvp5c(@(x,y) ode(x,y,C1,C2,B,C,F), @bc, solinit);
+
+    g = @(x) deval(sol, x, 1);
+    dg = @(x) deval(sol, x, 2);
     
-    x = linspace(0, right_out, N);
-    
-    g = deval(sol, x);
-    dg = g(2,:);
-    g = g(1,:);
-  
-    dgdx_0 = dg(1);
+    dgdx_0 = dg(0);
+
     u_t = -lambda*dgdx_0*(Tmax - Ts)/(rho_t*(Gt+Cpt*(Ts-Ts0)));
 
     fprintf('Pk = %e\n', Pk);
@@ -65,12 +63,4 @@ function res = bc(ya,yb)
       ya(1);
       yb(1) - 1;
     ];
-end
-
-function [C1,C2,B,C,F] = params(lambda,R,Cp,Pk,Ts,Tmax,Ak,Ea,Gt,Cpt,Ts0)
-    C1 = Cp*(Ts - Tmax)/(Gt+Cpt*(Ts - Ts0));
-    C2 = Ak*Cp*Pk/(lambda*R);
-    B = Ts;
-    C = Tmax - Ts;
-    F = -Ea/R;
 end
