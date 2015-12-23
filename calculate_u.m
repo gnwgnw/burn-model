@@ -31,10 +31,10 @@ function [u_t, g, dg] = calculate_u(lambda,R,Cp,Pk,Ts,Tmax,rho_t,Ak,Ea,Gt,Cpt,Ts
         linspace(0, burn_edge, burn_mesh_dens*N) linspace(burn_edge, right, (1-burn_mesh_dens)*N)
     ]);
 
-    [A,B,C,D,E,F] = params(lambda,R,Cp,Pk,Ts,Tmax,rho_t,Ak,Ea,Gt,Cpt,Ts0);
+    [C1,C2,B,C,F] = params(lambda,R,Cp,Pk,Ts,Tmax,Ak,Ea,Gt,Cpt,Ts0);
     
     solinit = bvpinit(x_mesh, [1 1]);
-    sol = bvp5c(@(x,y) ode(x,y,A,B,C,D,E,F), @bc, solinit);
+    sol = bvp5c(@(x,y) ode(x,y,C1,C2,B,C,F), @bc, solinit);
     
     x = linspace(0, right_out, N);
     
@@ -51,13 +51,13 @@ function [u_t, g, dg] = calculate_u(lambda,R,Cp,Pk,Ts,Tmax,rho_t,Ak,Ea,Gt,Cpt,Ts
 
 end
 
-function dydx = ode(x,y,A,B,C,D,E,F)
+function dydx = ode(x,y,C1,C2,B,C,F)
     y1 = y(1);
     y2 = y(2);
 
     dydx = zeros(2,1);
     dydx(1) = y2;
-    dydx(2) = -y2*y2(1)*D/A -(1-y1)/(B+y1*C)*E/A*exp(F/(B+y1*C));
+    dydx(2) = -y2*y2(1)*C1 - (1-y1)/(B+y1*C)*C2*exp(F/(B+y1*C));
 end
 
 function res = bc(ya,yb)
@@ -67,11 +67,10 @@ function res = bc(ya,yb)
     ];
 end
 
-function [A,B,C,D,E,F] = params(lambda,R,Cp,Pk,Ts,Tmax,rho_t,Ak,Ea,Gt,Cpt,Ts0)
-    A = lambda*R/(Cp*Pk);
+function [C1,C2,B,C,F] = params(lambda,R,Cp,Pk,Ts,Tmax,Ak,Ea,Gt,Cpt,Ts0)
+    C1 = (Ts - Tmax)/(Gt+Cpt*(Ts - Ts0));
+    C2 = Ak*Cp*Pk/(lambda*R);
     B = Ts;
     C = Tmax - Ts;
-    D = rho_t * (-lambda*(Tmax - Ts)/(rho_t*(Gt+Cpt*(Ts - Ts0)))) * R / Pk;
-    E = Ak;
     F = -Ea/R;
 end
