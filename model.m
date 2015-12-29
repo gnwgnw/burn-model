@@ -22,7 +22,7 @@ function varargout = model(varargin)
 
 % Edit the above text to modify the response to help model
 
-% Last Modified by GUIDE v2.5 27-Dec-2015 22:17:15
+% Last Modified by GUIDE v2.5 29-Dec-2015 16:29:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,7 +51,34 @@ function model_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to model (see VARARGIN)
-
+ handles.right = 0.01;
+ handles.edittext_right.('String') = handles.right;
+ handles.burn_edge = 1e-3;
+ handles.edittext_burn_edge.('String') = handles.burn_edge;
+ handles.right_plot = 1e-3; 
+ handles.edittext_right_plot.('String') = handles.right_plot;
+ handles.N = 2000;
+ handles.edittext_N.('String') = handles.N;
+ handles.Gt = -5e4;
+ handles.edittext_Gt.('String') = handles.Gt;
+ handles.Cpt = 1464;
+ handles.edittext_Cpt.('String') = handles.Cpt;
+ handles.Ts0 = 300;
+ handles.edittext_Ts0.('String') = handles.Ts0;
+ handles.lambda = 0.23;
+ handles.edittext_lambda.('String') = handles.lambda;
+ handles.R = 363;
+ handles.edittext_R.('String') = handles.R;
+ handles.Cp = 1800;
+ handles.edittext_Cp.('String') = handles.Cp;
+ handles.Ts = 720;
+ handles.edittext_Ts.('String') = handles.Ts;
+ handles.Tmax = 2360;
+ handles.edittext_Tmax.('String') = handles.Tmax;
+ handles.rho_t = 1600;
+ handles.edittext_rho_t.('String') = handles.rho_t;
+ handles.Ea = 4e6;
+ handles.edittext_Ea.('String') = handles.Ea;
 % Choose default command line output for model
 handles.output = hObject;
 
@@ -78,8 +105,7 @@ function edittext_lambda_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_lambda (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_lambda, 'String');
-str2num(get(handles.edittext_lambda, 'String'));
+str2num(handles.edittext_lambda.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_lambda as text
 %        str2double(get(hObject,'String')) returns contents of edittext_lambda as a double
@@ -92,23 +118,21 @@ function edittext_R_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_R (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_R, 'String');
-str2num(get(handles.edittext_R, 'String'));
+str2num(handles.edittext_R.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_R as text
 %        str2double(get(hObject,'String')) returns contents of edittext_R as a double
 
 
 
-function edittext_cp_Callback(hObject, eventdata, handles)
-% hObject    handle to edittext_cp (see GCBO)
+function edittext_Cp_Callback(hObject, eventdata, handles)
+% hObject    handle to edittext_Cp (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_cp, 'String');
-str2num(get(handles.edittext_cp, 'String'));
+str2num(handles.edittext_Cp.('String'));
 
-% Hints: get(hObject,'String') returns contents of edittext_cp as text
-%        str2double(get(hObject,'String')) returns contents of edittext_cp as a double
+% Hints: get(hObject,'String') returns contents of edittext_Cp as text
+%        str2double(get(hObject,'String')) returns contents of edittext_Cp as a double
 
 
 
@@ -116,8 +140,7 @@ function edittext_right_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_right (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_right, 'String');
-str2num(get(handles.edittext_right, 'String'));
+str2num(handles.edittext_right.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_right as text
 %        str2double(get(hObject,'String')) returns contents of edittext_right as a double
@@ -128,8 +151,7 @@ function edittext_Ts_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_Ts (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_Ts, 'String');
-str2num(get(handles.edittext_Ts, 'String'));
+str2num(handles.edittext_Ts.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_Ts as text
 %        str2double(get(hObject,'String')) returns contents of edittext_Ts as a double
@@ -140,22 +162,20 @@ function edittext_Tmax_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_Tmax (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_Tmax, 'String');
-str2num(get(handles.edittext_Tmax, 'String'));
+str2num(handles.edittext_Tmax.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_Tmax as text
 %        str2double(get(hObject,'String')) returns contents of edittext_Tmax as a double
 
 
 
-function edittext_rt_Callback(hObject, eventdata, handles)
-% hObject    handle to edittext_rt (see GCBO)
+function edittext_rho_t_Callback(hObject, eventdata, handles)
+% hObject    handle to edittext_rho_t (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_rt, 'String');
-str2num(get(handles.edittext_rt, 'String'));
-% Hints: get(hObject,'String') returns contents of edittext_rt as text
-%        str2double(get(hObject,'String')) returns contents of edittext_rt as a double
+str2num(handles.edittext_rho_t.('String'));
+% Hints: get(hObject,'String') returns contents of edittext_rho_t as text
+%        str2double(get(hObject,'String')) returns contents of edittext_rho_t as a double
 
 
 function edittext_Ak_Callback(hObject, eventdata, handles)
@@ -172,8 +192,7 @@ function edittext_Ea_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_Ea (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_Ea, 'String');
-str2num(get(handles.edittext_Ea, 'String'));
+str2num(handles.edittext_Ea.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_Ea as text
 %        str2double(get(hObject,'String')) returns contents of edittext_Ea
@@ -184,30 +203,27 @@ function edittext_Gt_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_Gt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_Gt, 'String');
-str2num(get(handles.edittext_Gt, 'String'));
+str2num(handles.edittext_Gt.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_Gt as text
 %        str2double(get(hObject,'String')) returns contents of edittext_Gt as a double
 
 
-function edittext_cpt_Callback(hObject, eventdata, handles)
-% hObject    handle to edittext_cpt (see GCBO)
+function edittext_Cpt_Callback(hObject, eventdata, handles)
+% hObject    handle to edittext_Cpt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_cpt, 'String');
-str2num(get(handles.edittext_cpt, 'String'));
+str2num(handles.edittext_Cpt.('String'));
 
-% Hints: get(hObject,'String') returns contents of edittext_cpt as text
-%        str2double(get(hObject,'String')) returns contents of edittext_cpt as a double
+% Hints: get(hObject,'String') returns contents of edittext_Cpt as text
+%        str2double(get(hObject,'String')) returns contents of edittext_Cpt as a double
 
 
 function edittext_Ts0_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_Ts0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_Ts0, 'String');
-str2num(get(handles.edittext_Ts0, 'String'));
+str2num(handles.edittext_Ts0.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_Ts0 as text
 %        str2double(get(hObject,'String')) returns contents of edittext_Ts0 as a double
@@ -217,44 +233,43 @@ function pushbutton_plot_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_plot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-pk=unique([linspace(10^5, 10^7, 20) linspace(10^7, 10^8, 10)]);
-n = length(pk);
+Pk=unique([linspace(10^5, 10^7, 20) linspace(10^7, 10^8, 10)]);
+n = length(Pk);
 A= handles.Ak_list;
 m=length(A);
      hold on;
 for i=1:1:m
     for j=1:1:n
-        pk(j);
+        Pk(j);
         %u(j) = foo(....) 
         u(j) = A(i);
     end
-          plot(pk,u);    
+          plot(Pk,u);   
+          legendInfo{i} = ['A = ' num2str(A(i))];
 end    
-   
+   legend(legendInfo);
 
 function edittext_burn_edge_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_burn_edge (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_burn_edge, 'String');
-str2num(get(handles.edittext_burn_edge, 'String'));
+str2num(handles.edittext_burn_edge.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_burn_edge as text
 %        str2double(get(hObject,'String')) returns contents of edittext_burn_edge as a double
 
 
 
-function edittext_right_out_Callback(hObject, eventdata, handles)
-% hObject    handle to edittext_right_out (see GCBO)
+function edittext_right_plot_Callback(hObject, eventdata, handles)
+% hObject    handle to edittext_right_plot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_right_out, 'String');
-str2num(get(handles.edittext_right_out, 'String'));
+str2num(handles.edittext_right_plot.('String'));
 
 
-% Hints: get(hObject,'String') returns contents of edittext_right_out as text
+% Hints: get(hObject,'String') returns contents of edittext_right_plot as text
 %        str2double(get(hObject,'String')) returns contents of
-%        edittext_right_out as a double
+%        edittext_right_plot as a double
 
 
 
@@ -262,9 +277,7 @@ function edittext_N_Callback(hObject, eventdata, handles)
 % hObject    handle to edittext_N (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-get(handles.edittext_N, 'String');
-str2num(get(handles.edittext_N, 'String'));
+str2num(handles.edittext_N.('String'));
 
 % Hints: get(hObject,'String') returns contents of edittext_N as text
 %        str2double(get(hObject,'String')) returns contents of edittext_N as a double
-
